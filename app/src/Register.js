@@ -15,6 +15,8 @@ class Register extends Component {
             last_name: '',
             userid: '',
             password: '',
+            btnLabel: 'Submit',
+            btnDisabled: false,
             isSubmitted: false
         };
         this.submitData = this.submitData.bind(this);
@@ -28,6 +30,9 @@ class Register extends Component {
             "userid": this.state.userid,
             "password": this.state.password
         };
+
+        self.setState({btnLabel: 'Registering ...', btnDisabled: !this.state.btnDisabled});
+
         axios.post(apiBaseUrl + '/register', payload)
             .then(function (response) {
                 if (response.data.code === 200) {
@@ -76,7 +81,9 @@ class Register extends Component {
                                 onChange={(event, newValue) => this.setState({password: newValue})}
                             />
                             <br/>
-                            <RaisedButton onClick={this.submitData}>Submit</RaisedButton>
+                            <RaisedButton label={this.state.btnLabel}
+                                          disabled={this.state.btnDisabled}
+                                          onClick={this.submitData}></RaisedButton>
                         </div>
                     </MuiThemeProvider>
                 </div>
