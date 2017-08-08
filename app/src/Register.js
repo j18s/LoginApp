@@ -4,7 +4,8 @@ import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import axios from 'axios';
-
+import Message from './Message'
+import {apiBaseUrl} from './Config';
 
 class Register extends Component {
     constructor(props) {
@@ -13,14 +14,14 @@ class Register extends Component {
             first_name: '',
             last_name: '',
             userid: '',
-            password: ''
-        }
+            password: '',
+            isSubmitted: false
+        };
         this.submitData = this.submitData.bind(this);
     }
 
     submitData() {
-        let apiBaseUrl = "http://localhost:4000/api";
-
+        let self = this;
         let payload = {
             "first_name": this.state.first_name,
             "last_name": this.state.last_name,
@@ -29,52 +30,64 @@ class Register extends Component {
         };
         axios.post(apiBaseUrl + '/register', payload)
             .then(function (response) {
-                console.log(response);
                 if (response.data.code === 200) {
-
+                    console.log(response.data.output.insertId);
+                    axios.post(apiBaseUrl + '/setimage/' + response.data.output.insertId)
+                        .then(function () {
+                            self.setState({isSubmitted: true});
+                        });
                 }
             });
     }
 
     render() {
-        return (
-            <div>
-                <MuiThemeProvider>
-                    <div>
-                        <AppBar
-                            title="Register" className="App-Bar"
-                        />
-                        <TextField
-                            hintText="Enter your First Name"
-                            floatingLabelText="First Name"
-                            onChange={(event, newValue) => this.setState({first_name: newValue})}
-                        />
-                        <br/>
-                        <TextField
-                            hintText="Enter your Last Name"
-                            floatingLabelText="Last Name"
-                            onChange={(event, newValue) => this.setState({last_name: newValue})}
-                        />
-                        <br/>
-                        <TextField
-                            hintText="Enter your Email"
-                            type="email"
-                            floatingLabelText="Email"
-                            onChange={(event, newValue) => this.setState({userid: newValue})}
-                        />
-                        <br/>
-                        <TextField
-                            type="password"
-                            hintText="Enter your Password"
-                            floatingLabelText="Password"
-                            onChange={(event, newValue) => this.setState({password: newValue})}
-                        />
-                        <br/>
-                        <RaisedButton onClick={this.submitData}>Submit</RaisedButton>
-                    </div>
-                </MuiThemeProvider>
-            </div>
-        );
+        const {isSubmitted} = this.state;
+        if (isSubmitted === false) {
+            return (
+                <div>
+                    <MuiThemeProvider>
+                        <div>
+                            <AppBar
+                                title="Register" className="App-Bar"
+                            />
+                            <TextField
+                                hintText="Enter your First Name"
+                                floatingLabelText="First Name"
+                                onChange={(event, newValue) => this.setState({first_name: newValue})}
+                            />
+                            <br/>
+                            <TextField
+                                hintText="Enter your Last Name"
+                                floatingLabelText="Last Name"
+                                onChange={(event, newValue) => this.setState({last_name: newValue})}
+                            />
+                            <br/>
+                            <TextField
+                                hintText="Enter your Email"
+                                type="email"
+                                floatingLabelText="Email"
+                                onChange={(event, newValue) => this.setState({userid: newValue})}
+                            />
+                            <br/>
+                            <TextField
+                                type="password"
+                                hintText="Enter your Password"
+                                floatingLabelText="Password"
+                                onChange={(event, newValue) => this.setState({password: newValue})}
+                            />
+                            <br/>
+                            <RaisedButton onClick={this.submitData}>Submit</RaisedButton>
+                        </div>
+                    </MuiThemeProvider>
+                </div>
+            )
+        }
+        else {
+            return (
+                <Message message="User is registered, please use Login button to login."/>
+            )
+        }
     }
 }
+
 export default Register;

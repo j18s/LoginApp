@@ -1,17 +1,18 @@
-var express = require("express");
-var login = require('./routes/user');
+let express = require("express");
+let login = require('./routes/user');
+let path = require('path');
 
-var bodyParser = require('body-parser');
-var app = express();
+let bodyParser = require('body-parser');
+let app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-
+app.use(express.static(path.resolve('./public')));
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
-var router = express.Router();
+let router = express.Router();
 
 // test route
 router.get('/', function (req, res) {
@@ -21,8 +22,8 @@ router.get('/', function (req, res) {
 //route to handle user registration
 router.post('/register', login.register);
 router.post('/login',login.login);
-router.get('/getimage/:id',login.getimage);
-router.get('/readimage/:id',login.readimage);
+router.post('/setimage/:id',login.setimage);
+// router.get('/readimage/:id',login.readimage);
 
 app.use('/api', router);
 app.listen(4000);

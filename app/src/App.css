@@ -6,6 +6,12 @@
 .App-Bar{
     background-color: #007eff!important;
 }
+.App-Body{
+    margin-top:50px;
+    font-size:18px;
+    color:#007eff;
+    text-align: center;
+}
 .App-link {
     font-weight: 300;
     line-height: 22px;

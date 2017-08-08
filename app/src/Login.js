@@ -4,19 +4,19 @@ import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import axios from 'axios';
-import {Redirect} from 'react-router-dom';
 import Account from './Account';
-
-//todo: put validations in place like userid exists already.
+import {apiBaseUrl} from './Config';
 
 class Login extends Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
+            id: '',
             first_name: '',
             last_name: '',
-            userid: 'bb',
-            password: '900',
+            userid: '',
+            password: '',
+            url: '',
             isLogin: false
         };
         this.handleClick = this.handleClick.bind(this);
@@ -25,30 +25,29 @@ class Login extends Component {
     handleClick(event) {
         event.preventDefault();
         let self = this;
-        let apiBaseUrl = "http://localhost:4000/api";
         let payload = {
             "userid": this.state.userid,
             "password": this.state.password
         };
-        // console.log(this);
         axios.post(apiBaseUrl + '/login', payload)
             .then(function (response) {
-                // console.log(response);
                 if (response.data.code === 200) {
-                    console.log(response.data);
-                    self.setState({isLogin: true,
-                        first_name:response.data.output.first_name,
-                        last_name:response.data.output.last_name
+                    self.setState({
+                        isLogin: true,
+                        first_name: response.data.output.first_name,
+                        last_name: response.data.output.last_name,
+                        url: response.data.output.url
                     });
+                }
+                else if (response.data.code === 401) {
+                    console.log('Record not match.')
                 }
             });
     }
 
     render() {
-        // console.log(this.props.location.state);
-        // const { from } = this.props.location.state || '/';
         const {isLogin} = this.state;
-        if (isLogin===false) {
+        if (isLogin === false) {
             return (
                 <div>
                     <MuiThemeProvider>
@@ -59,7 +58,6 @@ class Login extends Component {
                             <TextField
                                 hintText="Enter your Email address"
                                 floatingLabelText="Email address"
-                                defaultValue="bb"
                                 onChange={(event, newValue) => this.setState({userid: newValue})}
                             />
                             <br/>
@@ -67,7 +65,6 @@ class Login extends Component {
                                 type="password"
                                 hintText="Enter your Password"
                                 floatingLabelText="Password"
-                                defaultValue="900"
                                 onChange={(event, newValue) => this.setState({password: newValue})}
                             />
                             <br/>
@@ -77,12 +74,11 @@ class Login extends Component {
                 </div>
             );
         }
-        else
-        {
-            return(
-            <div>
-                <Account first_name={this.state.first_name} last_name={this.state.last_name}/>
-            </div>);
+        else {
+            return (
+                <div>
+                    <Account url={this.state.url} first_name={this.state.first_name} last_name={this.state.last_name}/>
+                </div>);
         }
     }
 }
