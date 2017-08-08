@@ -1,8 +1,10 @@
 let express = require("express");
-let login = require('./routes/user');
 let path = require('path');
-
 let bodyParser = require('body-parser');
+let login = require('./routes/user');
+let imageHandler = require('./routes/image');
+
+
 let app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -22,7 +24,7 @@ router.get('/', function (req, res) {
 //route to handle user registration
 router.post('/register', login.register);
 router.post('/login',login.login);
-router.post('/setimage/:id',login.setimage);
+router.post('/setimage/:id',imageHandler.setimage);
 // router.get('/readimage/:id',login.readimage);
 
 app.use('/api', router);
