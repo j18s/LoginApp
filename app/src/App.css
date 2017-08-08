@@ -1,5 +1,7 @@
 .App {
     text-align: left;
+    padding-left: 100px;
+    padding-right: 100px;
 }
 .App-Bar{
     background-color: #007eff!important;
@@ -21,7 +23,7 @@
     padding-right: 100px;
 }
 
-.App, App-header {
+.App-header {
     padding-left: 100px;
     padding-right: 100px;
     color: white;

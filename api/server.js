@@ -1,6 +1,5 @@
 var express = require("express");
 var login = require('./routes/user');
-// var register = require('./routes/register');
 
 var bodyParser = require('body-parser');
 var app = express();
@@ -22,6 +21,9 @@ router.get('/', function (req, res) {
 //route to handle user registration
 router.post('/register', login.register);
 router.post('/login',login.login);
+router.get('/getimage/:id',login.getimage);
+router.get('/readimage/:id',login.readimage);
+
 app.use('/api', router);
 app.listen(4000);
 console.log('started ...');

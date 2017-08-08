@@ -21,7 +21,6 @@ class Register extends Component {
     submitData() {
         let apiBaseUrl = "http://localhost:4000/api";
 
-        console.log(this.state.first_name);
         let payload = {
             "first_name": this.state.first_name,
             "last_name": this.state.last_name,
@@ -31,7 +30,7 @@ class Register extends Component {
         axios.post(apiBaseUrl + '/register', payload)
             .then(function (response) {
                 console.log(response);
-                if (response.data.code == 200) {
+                if (response.data.code === 200) {
 
                 }
             });
@@ -71,15 +70,11 @@ class Register extends Component {
                             onChange={(event, newValue) => this.setState({password: newValue})}
                         />
                         <br/>
-                        <RaisedButton onClick={this.submitData}>click</RaisedButton>
+                        <RaisedButton onClick={this.submitData}>Submit</RaisedButton>
                     </div>
                 </MuiThemeProvider>
             </div>
         );
     }
 }
-
-const style = {
-    margin: 15,
-};
 export default Register;
