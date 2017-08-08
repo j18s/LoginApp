@@ -1,3 +1,5 @@
+create database liimex;
+use liimex;
 create table Users(id smallint not null auto_increment,
     first_name varchar(100),
     last_name varchar(100),
